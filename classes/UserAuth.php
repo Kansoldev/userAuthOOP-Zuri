@@ -3,7 +3,7 @@ include_once 'Dbh.php';
 session_start();
 
 class UserAuth extends Dbh{
-    private static $db;
+    protected $db;
 
     public function __construct(){
         $this->db = new Dbh();
@@ -11,16 +11,19 @@ class UserAuth extends Dbh{
 
     public function register($fullname, $email, $password, $confirmPassword, $country, $gender){
         $conn = $this->db->connect();
-        if($this->confirmPasswordMatch($password, $confirmPassword)){
-            $sql = "INSERT INTO Students (`full_names`, `email`, `password`, `country`, `gender`) VALUES ('$fullname','$email', '$password', '$country', '$gender')";
-            if($conn->query($sql)){
-               echo "Ok";
-            } else {
-                echo "Opps". $conn->error;
+
+        if ($this->getUserByEmail($email)) {
+            header("Location: ./forms/register.php?message=Email already exists");
+        } else {
+            if($this->confirmPasswordMatch($password, $confirmPassword)){
+                $sql = "INSERT INTO students (`full_names`, `country`, `email`, `gender`, `password`) VALUES ('$fullname', '$country', '$email', '$gender', '$password')";
+                if($conn->query($sql)){
+                   echo "Ok";
+                } else {
+                    echo "Opps". $conn->error;
+                }
             }
         }
-
-        
     }
 
     public function login($email, $password){
@@ -101,9 +104,9 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function getUserByUsername($username){
+    public function getUserByEmail($email){
         $conn = $this->db->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
+        $sql = "SELECT * FROM students WHERE email = '$email'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
             return $result->fetch_assoc();
