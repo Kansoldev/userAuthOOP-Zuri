@@ -24,6 +24,8 @@ class UserAuth extends Dbh{
                 } else {
                     echo "Opps". $conn->error;
                 }
+            } else {
+                header("Location: ./forms/register.php?message=your passwords do not match");
             }
         }
     }
@@ -85,11 +87,18 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function updateUser($username, $password){
+    public function updateUser($email, $password){
         $conn = $this->db->connect();
-        $sql = "UPDATE users SET password = '$password' WHERE username = '$username'";
-        if($conn->query($sql) === TRUE){
-            header("Location: ../dashboard.php?update=success");
+
+        if ($this->getUserByEmail($email)) {
+            $sql = "UPDATE students SET password = '$password' WHERE email = '$email'";
+
+            if($conn->query($sql) === TRUE){
+                $_SESSION['email'] = $email;
+                header("Location: ./dashboard.php?update=success");
+            } else {
+                header("Location: forms/resetpassword.php?error=1");
+            }
         } else {
             header("Location: forms/resetpassword.php?error=1");
         }
