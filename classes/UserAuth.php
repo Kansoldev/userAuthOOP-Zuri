@@ -18,7 +18,9 @@ class UserAuth extends Dbh{
             if($this->confirmPasswordMatch($password, $confirmPassword)){
                 $sql = "INSERT INTO students (`full_names`, `country`, `email`, `gender`, `password`) VALUES ('$fullname', '$country', '$email', '$gender', '$password')";
                 if($conn->query($sql)){
-                   echo "Ok";
+                    $_SESSION['email'] = $email;
+                   echo "Registration successful!, please wait you are being redirected...";
+                   header("refresh:2; url=./dashboard.php");
                 } else {
                     echo "Opps". $conn->error;
                 }
