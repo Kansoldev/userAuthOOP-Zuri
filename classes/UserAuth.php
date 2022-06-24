@@ -40,17 +40,6 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function getUser($username){
-        $conn = $this->db->connect();
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            return $result->fetch_assoc();
-        } else {
-            return false;
-        }
-    }
-
     public function getAllUsers(){
         $conn = $this->db->connect();
         $sql = "SELECT * FROM Students";
