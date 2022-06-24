@@ -42,8 +42,8 @@
                     break;
                 case isset($_POST['delete']):
                     //unpack all data for deleting
-                    $this->email = $_POST['email'];
-                    $this->deleteUser($this->email);
+                    $this->id = $_POST['id'];
+                    $this->deleteUser($this->id);
                     break;
                 case isset($_POST['reset']):
                     //unpack all data for updating password
@@ -52,6 +52,7 @@
                     $this->updateUser($this->email, $this->password);
                     break;
                 case isset($_POST['all']):
+                case isset($_GET['all']): // This is necessary because deleteUser() is sending all param has a GET parameter and not POST
                     //unpack all data for getting all users
                     $this->getAllUsers();
                     break;
