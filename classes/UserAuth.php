@@ -117,8 +117,7 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function logout($username){
-        session_start();
+    public function logout(){
         session_destroy();
         header('Location: index.php');
     }
