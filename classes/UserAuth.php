@@ -34,7 +34,7 @@ class UserAuth extends Dbh{
         $result = $conn->query($sql);
         if($result->num_rows > 0){
             $_SESSION['email'] = $email;
-            header("Location: ../dashboard.php");
+            header("Location: ./dashboard.php");
         } else {
             header("Location: forms/login.php");
         }
