@@ -12,7 +12,7 @@ class UserAuth extends Dbh{
     public function register($fullname, $email, $password, $confirmPassword, $country, $gender){
         $conn = $this->db->connect();
 
-        if ($this->getUserByEmail($email)) {
+        if ($this->checkEmailExist($email)) {
             header("Location: ./forms/register.php?message=Email already exists");
         } else {
             if($this->confirmPasswordMatch($password, $confirmPassword)){
@@ -90,7 +90,7 @@ class UserAuth extends Dbh{
     public function updateUser($email, $password){
         $conn = $this->db->connect();
 
-        if ($this->getUserByEmail($email)) {
+        if ($this->checkEmailExist($email)) {
             $sql = "UPDATE students SET password = '$password' WHERE email = '$email'";
 
             if($conn->query($sql) === TRUE){
@@ -104,7 +104,7 @@ class UserAuth extends Dbh{
         }
     }
 
-    public function getUserByEmail($email){
+    public function checkEmailExist($email){
         $conn = $this->db->connect();
         $sql = "SELECT * FROM students WHERE email = '$email'";
         $result = $conn->query($sql);
